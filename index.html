@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hvor skal vi hen? – Semester i udlandet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e6edf1;
+    --paper: #fbfcfd;
+    --ink: #14213d;
+    --muted: #5d6b82;
+    --line: #c9d4dc;
+    --accent: #2b4eff;
+    --pro: #17795a;
+    --pro-bg: #e3f3ec;
+    --con: #b8322a;
+    --con-bg: #fbe8e6;
+    --head: "Bricolage Grotesque", Georgia, sans-serif;
+    --body: "DM Sans", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: 1rem; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--body); line-height: 1.5; font-size: 16px;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  h1 {
+    font-family: var(--head); font-weight: 800; letter-spacing: -0.02em;
+    font-size: clamp(2.6rem, 8vw, 5rem); line-height: 1; margin: 0 0 .5rem;
+  }
+  .sub { color: var(--muted); margin: 0 0 1.5rem; max-width: 52ch; }
+  .banner {
+    background: #fff4d6; border: 1px solid #e8cf85; border-radius: 8px;
+    padding: .75rem 1rem; margin-bottom: 1.25rem; font-size: .95rem;
+  }
+  .banner.error { background: var(--con-bg); border-color: #e5a8a3; }
+  .bar {
+    display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; align-items: end;
+    padding: 1rem 0 1.5rem; border-bottom: 2px solid var(--ink); margin-bottom: 1.5rem;
+  }
+  label { display: block; font-size: .85rem; font-weight: 700; margin-bottom: .25rem; }
+  input[type=text] {
+    font: inherit; padding: .55rem .7rem; border: 1.5px solid var(--line);
+    border-radius: 8px; background: #fff; color: var(--ink); width: 100%;
+  }
+  input[type=text]:focus-visible, button:focus-visible {
+    outline: 3px solid var(--accent); outline-offset: 1px;
+  }
+  button {
+    font: inherit; font-weight: 700; cursor: pointer; border-radius: 8px;
+    border: 1.5px solid var(--ink); background: var(--ink); color: #fff;
+    padding: .55rem 1rem;
+  }
+  button.ghost { background: transparent; color: var(--ink); }
+  button.small { padding: .35rem .7rem; font-size: .9rem; }
+  button:hover { filter: brightness(1.15); }
+  .who { width: 14rem; }
+  .newdest { display: grid; grid-template-columns: 1.3fr 1fr 2fr auto; gap: .75rem; align-items: end; flex: 1 1 100%; }
+  @media (max-width: 760px) { .newdest { grid-template-columns: 1fr; } .who { width: 100%; } }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); gap: 1.5rem; }
+  .card {
+    background: var(--paper); border: 1.5px solid var(--ink); border-radius: 14px;
+    padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;
+  }
+  .card-head { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
+  .card h2 { font-family: var(--head); font-weight: 800; font-size: 1.9rem; line-height: 1.05; margin: 0; letter-spacing: -0.01em; }
+  .country { color: var(--muted); font-weight: 500; }
+  .note { margin: 0; color: var(--ink); }
+  .votes { display: flex; flex-wrap: wrap; gap: .5rem .75rem; align-items: center; font-size: .9rem; color: var(--muted); }
+  .votes button.on { background: var(--accent); border-color: var(--accent); }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 560px) { .cols { grid-template-columns: 1fr; } }
+  .col { border-radius: 10px; padding: .85rem; }
+  .col.pro { background: var(--pro-bg); }
+  .col.con { background: var(--con-bg); }
+  .col h3 { margin: 0 0 .5rem; font-size: 1rem; }
+  .col.pro h3 { color: var(--pro); }
+  .col.con h3 { color: var(--con); }
+  ul { list-style: none; margin: 0 0 .75rem; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
+  li { display: flex; justify-content: space-between; gap: .5rem; align-items: start; }
+  li .by { color: var(--muted); font-size: .8rem; display: block; }
+  li button.x {
+    background: none; border: none; color: var(--muted); padding: 0 .25rem;
+    font-size: 1.1rem; line-height: 1; font-weight: 400;
+  }
+  .add { display: flex; gap: .4rem; }
+  .add input { padding: .4rem .55rem; font-size: .92rem; }
+  .empty { color: var(--muted); font-style: italic; font-size: .9rem; margin: 0 0 .75rem; }
+  .none { padding: 2rem 0; color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Hvor skal vi hen?</h1>
+  <p class="sub">Tilføj mulige destinationer for udlandssemesteret, skriv fordele og ulemper, og stem på dem I kan lide.</p>
+
+  <div id="banner"></div>
+
+  <div class="bar">
+    <div class="who">
+      <label for="who">Dit navn</label>
+      <input type="text" id="who" placeholder="Fx Emma" autocomplete="given-name">
+    </div>
+    <form class="newdest" id="newdest" autocomplete="off">
+      <div><label for="d-name">By eller universitet</label><input type="text" id="d-name" placeholder="Fx Barcelona" required></div>
+      <div><label for="d-country">Land</label><input type="text" id="d-country" placeholder="Fx Spanien"></div>
+      <div><label for="d-note">Kort note (valgfri)</label><input type="text" id="d-note" placeholder="Fx UPF har aftale med vores studie"></div>
+      <button type="submit">Tilføj destination</button>
+    </form>
+  </div>
+
+  <div id="list" class="grid"></div>
+</div>
+
+<script>
+/* ============================================================
+   1) INDSÆT JERES FIREBASE-OPSÆTNING HER (se vejledningen)
+   Så længe apiKey starter med "DIN_", kører siden i demo-tilstand,
+   hvor data kun gemmes i din egen browser.
+   ============================================================ */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCYd_Yq_hW0WuqmAbmvaIOd3umTq8Y6SIE",
+  authDomain: "study-abroad-d9620.firebaseapp.com",
+  projectId: "study-abroad-d9620",
+  appId: "1:1033719755115:web:9d5a5c4c256ab73c4bdc2e"
+};
+
+const configured = !FIREBASE_CONFIG.apiKey.startsWith("DIN_");
+
+/* ---------- Datalag ---------- */
+function makeLocalStore() {
+  const KEY = "udlandssemester-demo";
+  let listeners = [];
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } };
+  const save = (d) => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {} listeners.forEach(f => f(d)); };
+  const edit = (id, fn) => { const d = load(); const x = d.find(i => i.id === id); if (x) fn(x); save(d); };
+  return {
+    subscribe(cb) { listeners.push(cb); cb(load()); },
+    async add(dest) { const d = load(); d.push({ ...dest, id: crypto.randomUUID(), createdAt: Date.now(), pros: [], cons: [], votes: [] }); save(d); },
+    async addItem(id, type, item) { edit(id, x => x[type].push(item)); },
+    async removeItem(id, type, item) { edit(id, x => { x[type] = x[type].filter(i => !(i.text === item.text && i.by === item.by)); }); },
+    async toggleVote(id, name, on) { edit(id, x => { x.votes = x.votes.filter(n => n !== name); if (on) x.votes.push(name); }); },
+    async remove(id) { save(load().filter(x => x.id !== id)); }
+  };
+}
+
+async function makeFirebaseStore(onError) {
+  const V = "10.12.2";
+  const { initializeApp } = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
+  const fs = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
+  const db = fs.getFirestore(initializeApp(FIREBASE_CONFIG));
+  const col = fs.collection(db, "destinations");
+  const ref = (id) => fs.doc(db, "destinations", id);
+  return {
+    subscribe(cb) {
+      fs.onSnapshot(fs.query(col, fs.orderBy("createdAt")),
+        snap => cb(snap.docs.map(d => ({ id: d.id, ...d.data() }))), onError);
+    },
+    add: (dest) => fs.addDoc(col, { ...dest, createdAt: Date.now(), pros: [], cons: [], votes: [] }),
+    addItem: (id, type, item) => fs.updateDoc(ref(id), { [type]: fs.arrayUnion(item) }),
+    removeItem: (id, type, item) => fs.updateDoc(ref(id), { [type]: fs.arrayRemove(item) }),
+    toggleVote: (id, name, on) => fs.updateDoc(ref(id), { votes: on ? fs.arrayUnion(name) : fs.arrayRemove(name) }),
+    remove: (id) => fs.deleteDoc(ref(id))
+  };
+}
+
+/* ---------- UI ---------- */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const whoInput = $("#who");
+try { whoInput.value = localStorage.getItem("udlandssemester-navn") || ""; } catch {}
+whoInput.addEventListener("input", () => { try { localStorage.setItem("udlandssemester-navn", whoInput.value.trim()); } catch {} render(); });
+const me = () => whoInput.value.trim();
+
+let store, data = [];
+const drafts = {};
+
+function needName() {
+  if (me()) return false;
+  whoInput.focus();
+  alert("Skriv dit navn øverst først, så de andre kan se hvem der har skrevet hvad.");
+  return true;
+}
+
+function itemList(d, type) {
+  const items = d[type] || [];
+  if (!items.length) return `<p class="empty">Ingen endnu</p>`;
+  return `<ul>${items.map((it, i) => `
+    <li><span>${esc(it.text)}<span class="by">${esc(it.by)}</span></span>
+    <button class="x" title="Fjern" aria-label="Fjern: ${esc(it.text)}" data-action="rm" data-id="${d.id}" data-type="${type}" data-i="${i}">×</button></li>`).join("")}</ul>`;
+}
+
+function card(d) {
+  const votes = d.votes || [];
+  const iVoted = votes.includes(me());
+  return `
+  <article class="card">
+    <div class="card-head">
+      <div>
+        <h2>${esc(d.name)}</h2>
+        ${d.country ? `<div class="country">${esc(d.country)}</div>` : ""}
+      </div>
+      <button class="ghost small" data-action="del" data-id="${d.id}">Slet</button>
+    </div>
+    ${d.note ? `<p class="note">${esc(d.note)}</p>` : ""}
+    <div class="votes">
+      <button class="small ${iVoted ? "on" : "ghost"}" data-action="vote" data-id="${d.id}">${iVoted ? "Du vil gerne derhen" : "Jeg vil gerne derhen"}</button>
+      <span>${votes.length} ${votes.length === 1 ? "stemme" : "stemmer"}${votes.length ? ": " + esc(votes.join(", ")) : ""}</span>
+    </div>
+    <div class="cols">
+      ${["pros", "cons"].map(type => `
+      <div class="col ${type === "pros" ? "pro" : "con"}">
+        <h3>${type === "pros" ? "Fordele" : "Ulemper"}</h3>
+        ${itemList(d, type)}
+        <div class="add">
+          <input type="text" data-draft="${d.id}-${type}" placeholder="${type === "pros" ? "Tilføj fordel" : "Tilføj ulempe"}" aria-label="${type === "pros" ? "Tilføj fordel" : "Tilføj ulempe"} for ${esc(d.name)}">
+          <button class="small" data-action="add" data-id="${d.id}" data-type="${type}">Tilføj</button>
+        </div>
+      </div>`).join("")}
+    </div>
+  </article>`;
+}
+
+function render() {
+  const active = document.activeElement;
+  const activeKey = active && active.dataset ? active.dataset.draft : null;
+  const sel = activeKey ? [active.selectionStart, active.selectionEnd] : null;
+
+  const sorted = [...data].sort((a, b) => (b.votes || []).length - (a.votes || []).length || a.createdAt - b.createdAt);
+  $("#list").innerHTML = sorted.length ? sorted.map(card).join("")
+    : `<p class="none">Ingen destinationer endnu. Tilføj den første ovenfor.</p>`;
+
+  document.querySelectorAll("[data-draft]").forEach(inp => { inp.value = drafts[inp.dataset.draft] || ""; });
+  if (activeKey) {
+    const el = document.querySelector(`[data-draft="${activeKey}"]`);
+    if (el) { el.focus(); if (sel) el.setSelectionRange(sel[0], sel[1]); }
+  }
+}
+
+document.addEventListener("input", (e) => {
+  if (e.target.dataset && e.target.dataset.draft) drafts[e.target.dataset.draft] = e.target.value;
+});
+
+async function addItemFrom(id, type) {
+  const key = `${id}-${type}`;
+  const text = (drafts[key] || "").trim();
+  if (!text || needName()) return;
+  drafts[key] = "";
+  await store.addItem(id, type, { text, by: me() });
+}
+
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("[data-action]");
+  if (!b) return;
+  const { action, id, type, i } = b.dataset;
+  const d = data.find(x => x.id === id);
+  try {
+    if (action === "add") await addItemFrom(id, type);
+    if (action === "rm" && d) await store.removeItem(id, type, d[type][Number(i)]);
+    if (action === "vote" && d) { if (needName()) return; await store.toggleVote(id, me(), !(d.votes || []).includes(me())); }
+    if (action === "del" && d && confirm(`Slet "${d.name}" med alle fordele og ulemper?`)) await store.remove(id);
+  } catch (err) { showError(err); }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && e.target.dataset && e.target.dataset.draft) {
+    e.preventDefault();
+    const key = e.target.dataset.draft;
+    const t = key.endsWith("-pros") ? "pros" : "cons";
+    addItemFrom(key.slice(0, key.length - t.length - 1), t).catch(showError);
+  }
+});
+
+$("#newdest").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if (needName()) return;
+  const name = $("#d-name").value.trim();
+  if (!name) return;
+  try {
+    await store.add({ name, country: $("#d-country").value.trim(), note: $("#d-note").value.trim(), createdBy: me() });
+    e.target.reset();
+  } catch (err) { showError(err); }
+});
+
+function showError(err) {
+  console.error(err);
+  $("#banner").innerHTML = `<div class="banner error">Noget gik galt: ${esc(err.message || err)}. Tjek at jeres Firestore-regler tillader læsning og skrivning.</div>`;
+}
+
+(async function start() {
+  if (configured) {
+    try { store = await makeFirebaseStore(showError); }
+    catch (err) { showError(err); return; }
+  } else {
+    store = makeLocalStore();
+    $("#banner").innerHTML = `<div class="banner"><strong>Demo-tilstand:</strong> data gemmes kun i din egen browser. Følg vejledningen og indsæt jeres Firebase-opsætning i index.html, så I kan dele listen.</div>`;
+  }
+  store.subscribe((d) => { data = d; render(); });
+})();
+</script>
+</body>
+</html>
